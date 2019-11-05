@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/lfl-common/lfl-common.iml" filepath="$PROJECT_DIR$/lfl-common/lfl-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lfl-mbg/lfl-mbg.iml" filepath="$PROJECT_DIR$/lfl-mbg/lfl-mbg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lfl-pingan-card.iml" filepath="$PROJECT_DIR$/lfl-pingan-card.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lfl-pingancard-web/lfl-pingancard-web.iml" filepath="$PROJECT_DIR$/lfl-pingancard-web/lfl-pingancard-web.iml" />
+    </modules>
+  </component>
+</project>

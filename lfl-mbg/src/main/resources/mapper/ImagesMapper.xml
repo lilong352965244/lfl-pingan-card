@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tk.mybatis.mapper.mapper.ImagesMapper">
+  <resultMap id="BaseResultMap" type="tk.mybatis.mapper.pojo.Images">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="images_url" jdbcType="VARCHAR" property="imagesUrl" />
+    <result column="img_description" jdbcType="VARCHAR" property="imgDescription" />
+    <result column="image_number" jdbcType="INTEGER" property="imageNumber" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+  </resultMap>
+</mapper>

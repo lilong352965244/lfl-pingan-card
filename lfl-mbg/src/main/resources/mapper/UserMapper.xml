@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tk.mybatis.mapper.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="tk.mybatis.mapper.pojo.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="mobile" jdbcType="INTEGER" property="mobile" />
+    <result column="enable_status" jdbcType="TINYINT" property="enableStatus" />
+    <result column="money" jdbcType="INTEGER" property="money" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+</mapper>
