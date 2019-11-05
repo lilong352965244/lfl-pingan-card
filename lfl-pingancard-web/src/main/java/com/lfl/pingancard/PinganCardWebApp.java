@@ -12,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @description:
  **/
 @SpringBootApplication
-@MapperScan(basePackages = "com.lfl.pingancard.mapper")
+@MapperScan("com.lfl.pingancard.mapper")
 public class PinganCardWebApp {
     public static void main(String[] args) {
         SpringApplication.run(PinganCardWebApp.class, args);
