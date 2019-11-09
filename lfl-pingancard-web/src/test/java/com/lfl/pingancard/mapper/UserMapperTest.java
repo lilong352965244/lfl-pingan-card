@@ -22,4 +22,11 @@ public class UserMapperTest {
         System.out.println(list);
     }
 
+
+    @Test
+    public void testQueryUser(){
+        List<User> list = userMapper.selectAll();
+        System.out.println(list);
+    }
+
 }

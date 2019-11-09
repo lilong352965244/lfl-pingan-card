@@ -1,9 +1,21 @@
 package com.lfl.pingancard.pojo;
 
-import javax.persistence.*;
+import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
+import java.util.Date;
 
 @Table(name = "tb_person")
-public class Person {
+@Data
+public class Person implements Serializable {
+    private static final long serialVersionUID = -3484884984126505918L;
     /**
      * 主键
      */
@@ -14,12 +26,13 @@ public class Person {
     /**
      * 用户id
      */
-    @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     /**
      * 客户名字
      */
+    @NotBlank(message = "客户姓名不能为空")
+    @Length(min = 2, max = 12)
     private String name;
 
     /**
@@ -30,96 +43,19 @@ public class Person {
     /**
      * 身份号
      */
-    @Column(name = "person_card")
+    @NotBlank(message = "客户身份证号不能为空")
+    @Pattern(regexp =
+            "^[1-9]\\d{5}(18|19|20|(3\\d))\\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$")
     private String personCard;
 
     /**
-     * 获取主键
-     *
-     * @return id - 主键
+     * 创建时间
      */
-    public Integer getId() {
-        return id;
-    }
+    private Date createTime;
 
     /**
-     * 设置主键
-     *
-     * @param id 主键
+     * 最后修改时间
      */
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private Date lastUpdateTime;
 
-    /**
-     * 获取用户id
-     *
-     * @return user_id - 用户id
-     */
-    public Integer getUserId() {
-        return userId;
-    }
-
-    /**
-     * 设置用户id
-     *
-     * @param userId 用户id
-     */
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * 获取客户名字
-     *
-     * @return name - 客户名字
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 设置客户名字
-     *
-     * @param name 客户名字
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * 获取客户联系方式
-     *
-     * @return phone - 客户联系方式
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * 设置客户联系方式
-     *
-     * @param phone 客户联系方式
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    /**
-     * 获取身份号
-     *
-     * @return person_card - 身份号
-     */
-    public String getPersonCard() {
-        return personCard;
-    }
-
-    /**
-     * 设置身份号
-     *
-     * @param personCard 身份号
-     */
-    public void setPersonCard(String personCard) {
-        this.personCard = personCard;
-    }
 }

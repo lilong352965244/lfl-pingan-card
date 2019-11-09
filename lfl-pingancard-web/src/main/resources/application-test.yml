@@ -1,14 +1,14 @@
 server:
-  port: 8081
+  port: 8282
 spring:
   application:
     name: cardservice
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pingan_card?useUnicode=true&charsetEncoding=utf8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://115.29.108.177:3306/pingan-card?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
   ## jdbc:mysql://192.168.100.7:3306/starday-os?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
     username: root
-    password: 123456
+    password: Rootlfl@2019
   hikari:
     maximum-pool-size: 20
     minimum-idle: 10
@@ -54,8 +54,8 @@ spring:
 
 logging:
   level:
-    com.sanyi.stardayweb.mapper: debug
+    com.lfl.pingancard.mapper: debug
 
 
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml

@@ -24,10 +24,9 @@ public class InterceptorConfig implements WebMvcConfigurer {
         //注册LoginInterceptor拦截器
         InterceptorRegistration registration = registry.addInterceptor(getLoginInterceptor());
         registration.addPathPatterns("/**");
-        registration.excludePathPatterns("/boss/content/list/*","/boss/user/login",
-                "/boss/user/logout",
-                "/frontend/customer/add",
-                "/frontend/apply/add");
+        registration.excludePathPatterns(
+                "/user/login",
+                "/user/register");
     }
 
 

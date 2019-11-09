@@ -1,8 +1,13 @@
 package com.lfl.pingancard.interceptor;
 
 import com.lfl.constant.CommonConstant;
+import com.lfl.exception.CustomException;
 import com.lfl.utils.CookieUtils;
+import com.lfl.utils.TokenUtil;
+import io.jsonwebtoken.Claims;
+import lombok.experimental.Tolerate;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -26,22 +31,27 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        return true;
-//        // 在请求处理之前进行调用（Controller方法调用之前）,返回true才会继续往下执行，返回false取消当前请求
-//        String tokenCode = request.getHeader("T_TOKEN");
-//        String key = CommonConstant.REDIS_KEY_PREX;
-//        if (tokenCode != null && !"".equals(tokenCode)) {
-//            if (stringRedisTemplate.hasKey("user:info:" + tokenCode)) {
-//                System.out.printf("token=%s存在，允许放行\r\n", tokenCode);
-//                // 重新设置redis,cookie 有效时间
-//                this.stringRedisTemplate.expire(key, CommonConstant.REDIS_EXPIRE_SECONDS, TimeUnit.SECONDS);
-//                CookieUtils.setCookie(request, response, "T_TOKEN", tokenCode, CommonConstant.REDIS_EXPIRE_SECONDS);
-//                return true;
-//            }
-//        }
-//        response.setStatus(415);
-//        log.info("token={}不存在或过期,请重新登录", tokenCode);
-//        return false;
+        // return true;
+        // 在请求处理之前进行调用（Controller方法调用之前）,返回true才会继续往下执行，返回false取消当前请求
+        // 获得cookie的token
+        String token = CookieUtils.getCookieValue(request, "TOKEN");
+
+        if (StringUtils.isNotBlank(token)) {
+            try {
+                Claims claims = TokenUtil.parseJWT(token);
+                System.out.printf("token=%s存在，允许放行\r\n", token);
+                request.setAttribute("username", claims.getId());
+                request.setAttribute("id",claims.get("id"));
+                return true;
+            } catch (Exception e) {
+                response.setStatus(401);
+                log.info("token={}不存在或过期,请重新登录", token);
+                return false;
+            }
+        }
+        response.setStatus(401);
+        log.info("token={}不存在或过期,请重新登录", token);
+        return false;
     }
 
 }

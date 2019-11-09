@@ -1,7 +1,7 @@
 package com.lfl.pingancard.mapper;
 
 import com.lfl.pingancard.pojo.Images;
-import tk.mybatis.mapper.common.Mapper;
+import com.lfl.tkmapper.TkMapper;
 
-public interface ImagesMapper extends Mapper<Images> {
+public interface ImagesMapper extends TkMapper<Images> {
 }

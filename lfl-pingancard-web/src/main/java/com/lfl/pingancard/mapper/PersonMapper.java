@@ -1,7 +1,7 @@
 package com.lfl.pingancard.mapper;
 
-import tk.mybatis.mapper.common.Mapper;
 import com.lfl.pingancard.pojo.Person;
+import com.lfl.tkmapper.TkMapper;
 
-public interface PersonMapper extends Mapper<Person> {
+public interface PersonMapper extends TkMapper<Person> {
 }

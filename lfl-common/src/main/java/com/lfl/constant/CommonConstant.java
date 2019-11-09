@@ -12,4 +12,6 @@ public class CommonConstant {
      */
     public static final String REDIS_KEY_PREX ="user:info:";
 
+    public static final long JWT_EXPIRE_Millis = 60 * 60 * 24 * 1000L;
+
 }
