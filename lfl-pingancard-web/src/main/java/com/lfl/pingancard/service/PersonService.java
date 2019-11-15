@@ -1,5 +1,6 @@
 package com.lfl.pingancard.service;
 
+import com.lfl.common.pojo.PageResult;
 import com.lfl.pingancard.pojo.Person;
 
 /**
@@ -28,4 +29,15 @@ public interface PersonService {
      * @param id
      */
     void deletePersonById(Long id);
+
+    /**
+     * 分页查询客户信息
+     * @param page
+     * @param rows
+     * @param sortBy
+     * @param desc
+     * @param key
+     * @return
+     */
+    PageResult<Person> queryPersonPageAndSort(Integer page, Integer rows, String sortBy, Boolean desc, String key);
 }

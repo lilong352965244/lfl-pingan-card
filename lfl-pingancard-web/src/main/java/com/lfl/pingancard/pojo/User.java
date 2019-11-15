@@ -1,5 +1,6 @@
 package com.lfl.pingancard.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -69,6 +70,7 @@ public class User implements Serializable {
     /**
      * 有效截止时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date expireTime;
 
     /**

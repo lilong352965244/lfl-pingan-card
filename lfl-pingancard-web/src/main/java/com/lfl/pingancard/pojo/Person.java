@@ -45,7 +45,8 @@ public class Person implements Serializable {
      */
     @NotBlank(message = "客户身份证号不能为空")
     @Pattern(regexp =
-            "^[1-9]\\d{5}(18|19|20|(3\\d))\\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$")
+            "^[1-9]\\d{5}(18|19|20|(3\\d))\\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$",
+            message = "身份证号格式有误")
     private String personCard;
 
     /**

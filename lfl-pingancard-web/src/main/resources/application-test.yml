@@ -1,8 +1,6 @@
 server:
   port: 8282
 spring:
-  application:
-    name: cardservice
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://115.29.108.177:3306/pingan-card?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai

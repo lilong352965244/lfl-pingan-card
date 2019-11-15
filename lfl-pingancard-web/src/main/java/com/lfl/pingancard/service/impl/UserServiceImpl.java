@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setEnableStatus(1);
         user.setLevel(0);
+        user.setValid(true);
 
         Date date = new Date();
         user.setExpireTime(date);

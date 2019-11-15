@@ -1,5 +1,6 @@
 package com.lfl.pingancard.controller;
 
+import com.lfl.common.pojo.PageResult;
 import com.lfl.pingancard.pojo.Person;
 import com.lfl.pingancard.pojo.User;
 import com.lfl.pingancard.service.PersonService;
@@ -64,6 +65,7 @@ public class PersonController {
 
     /**
      * 删除客户信息
+     *
      * @param id
      * @return
      */
@@ -74,6 +76,18 @@ public class PersonController {
     }
 
 
+    @GetMapping("/page")
+    public ResultBody queryPersonPage(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "rows", defaultValue = "5") Integer rows,
+            @RequestParam(value = "sortBy", required = false) String sortBy,
+            @RequestParam(value = "desc", defaultValue = "false") Boolean desc,
+            @RequestParam(value = "key", required = false) String key
+
+    ) {
+        PageResult<Person> pageResult = this.personService.queryPersonPageAndSort(page, rows, sortBy, desc, key);
+        return ResultBody.success(pageResult);
+    }
 
 
 }
