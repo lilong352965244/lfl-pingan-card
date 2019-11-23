@@ -1,5 +1,6 @@
 package com.lfl.pingancard.service;
 
+import com.lfl.pingancard.pojo.Images;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -8,6 +9,33 @@ import org.springframework.web.multipart.MultipartFile;
  * @description:
  **/
 public interface ImageService {
+    /**
+     * 上传图片
+     *
+     * @param file
+     * @return
+     */
+    String updateHead(MultipartFile file);
 
-     String updateHead(MultipartFile file, long userId);
+    /**
+     * 保存图片
+     *
+     * @param images
+     * @return
+     */
+    Boolean saveImages(Images images);
+
+    /**
+     * 根据personId查询images
+     *
+     * @param personId
+     * @return
+     */
+    Images queryImagesByPersonId(Long personId);
+
+    /**
+     * 更新图片信息
+     * @param images
+     */
+    Boolean updateImages(Images images);
 }

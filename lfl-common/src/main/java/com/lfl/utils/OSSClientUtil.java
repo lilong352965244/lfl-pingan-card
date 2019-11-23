@@ -1,6 +1,8 @@
 package com.lfl.utils;
 
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.DeleteObjectsRequest;
+import com.aliyun.oss.model.DeleteObjectsResult;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.lfl.exception.CustomException;
@@ -12,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URL;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: lifalong
@@ -21,18 +23,18 @@ import java.util.Random;
  * @description: 阿里云 OSS文件类
  **/
 
-@Component
+
 public class OSSClientUtil {
     Log log = LogFactory.getLog(OSSClientUtil.class);
     // endpoint以杭州为例，其它region请按实际情况填写
-    private String endpoint = "您的endpoint";
+    private String endpoint = OSSClientConstants.ENDPOINT;
     // accessKey
-    private String accessKeyId = "您的accessKeyId";
-    private String accessKeySecret = "您的accessKeySecret";
+    private String accessKeyId = OSSClientConstants.ACCESS_KEY_ID; //"您的accessKeyId"
+    private String accessKeySecret = OSSClientConstants.ACCESS_KEY_SECRET; //"您的accessKeySecret"
     //空间
-    private String bucketName = "bcis";
+    private String bucketName = OSSClientConstants.BACKET_NAME;//"bcis"
     //文件存储目录
-    private String filedir = "data/";
+    private String filedir = "test/";
 
     private OSSClient ossClient;
 
@@ -67,14 +69,14 @@ public class OSSClientUtil {
             String[] split = url.split("/");
             this.uploadFile2OSS(fin, split[split.length - 1]);
         } catch (FileNotFoundException e) {
-            throw new CustomException("图片上传失败");
+            throw new CustomException("-1", "图片上传失败");
         }
     }
 
 
     public String uploadImg2Oss(MultipartFile file) {
         if (file.getSize() > 1024 * 1024) {
-            throw new CustomException("上传图片大小不能超过1M！");
+            throw new CustomException("-1", "上传图片大小不能超过1M！");
         }
         String originalFilename = file.getOriginalFilename();
         String substring = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
@@ -85,7 +87,7 @@ public class OSSClientUtil {
             this.uploadFile2OSS(inputStream, name);
             return name;
         } catch (Exception e) {
-            throw new CustomException("图片上传失败");
+            throw new CustomException("-1", "图片上传失败");
         }
     }
 
@@ -98,7 +100,7 @@ public class OSSClientUtil {
     public String getImgUrl(String fileUrl) {
         if (!StringUtils.isEmpty(fileUrl)) {
             String[] split = fileUrl.split("/");
-            return this.getUrl(this.filedir + split[split.length - 1]);
+            return this.filedir + split[split.length - 1];   //this.getUrl(this.filedir + split[split.length - 1]);
         }
         return null;
     }
@@ -194,5 +196,32 @@ public class OSSClientUtil {
         }
         return null;
     }
+
+
+    /**
+     * 批量删除文件
+     *
+     * @param keys
+     * @return
+     */
+    public Boolean deleteFile(String[] keys) {
+
+        for (int i = 0; i < keys.length ; i++) {
+            String key = "test/" + keys[i].substring(keys[i].lastIndexOf("/") + 1);
+            keys[i] = key;
+        }
+
+        // 删除文件。key等同于ObjectName，表示删除OSS文件时需要指定包含文件后缀在内的完整路径，例如abc/efg/123.jpg。
+        List<String> keyList = Arrays.asList(keys);
+        //keyList.stream().map(tmp -> "test/" + tmp.substring(tmp.lastIndexOf("/") + 1)).collect(Collectors.toList());
+
+        DeleteObjectsResult deleteObjectsResult = ossClient.deleteObjects(new DeleteObjectsRequest(bucketName).withKeys(keyList));
+        List<String> deletedObjects = deleteObjectsResult.getDeletedObjects();
+        if (deletedObjects == null || deletedObjects.size() <= 0) {
+            return false;
+        }
+        return true;
+    }
+
 }
 

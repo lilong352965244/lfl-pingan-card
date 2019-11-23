@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author: lifalong
@@ -41,8 +43,12 @@ public class PersonController {
         if (user != null) {
             person.setUserId(user.getId());
             Boolean boo = this.personService.savePerson(person);
+
             if (boo) {
-                return ResultBody.success("添加客户成功");
+                // 获得tb_person的主键值
+                Map<String,Object> map=new HashMap<>();
+                map.put("personId",person.getId());
+                return ResultBody.success(map);
             }
         }
         return ResultBody.error("添加客户失败");
@@ -83,7 +89,6 @@ public class PersonController {
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @RequestParam(value = "desc", defaultValue = "false") Boolean desc,
             @RequestParam(value = "key", required = false) String key
-
     ) {
         PageResult<Person> pageResult = this.personService.queryPersonPageAndSort(page, rows, sortBy, desc, key);
         return ResultBody.success(pageResult);

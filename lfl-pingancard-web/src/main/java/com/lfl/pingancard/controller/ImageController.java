@@ -1,44 +1,109 @@
 package com.lfl.pingancard.controller;
 
-
-import com.lfl.common.pojo.Img;
+import com.lfl.pingancard.pojo.Images;
+import com.lfl.pingancard.pojo.User;
+import com.lfl.pingancard.service.ImageService;
+import com.lfl.pingancard.service.UserService;
 import com.lfl.response.ResultBody;
-import com.lfl.utils.AliYunOssUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
-//图片上传接口
+/**
+ * @author: lifalong
+ * @create: 2019-11-15 17:32
+ * @description:
+ **/
 @RestController
-@RequestMapping("/image")
+@RequestMapping("image")
+@Slf4j
 public class ImageController {
+    @Autowired
+    private ImageService imageService;
 
     /**
-     * 上传图片,图片格式
+     * 上传图片
      *
-     * @param img
+     * @param file
      * @return
      */
-    @RequestMapping(value = "/uploadimg", method = RequestMethod.POST)
-    public ResultBody upLoadImg(@RequestBody Img img) {
-        if (img == null || StringUtils.isBlank(img.getFiledir())) {
-            return ResultBody.error("参数错误 ");
-        }
-        String imageUrl = AliYunOssUtil.save(img.getFiledir(), img.getSuffix());
-        if (StringUtils.isNotBlank(imageUrl)) {
-            return ResultBody.success(imageUrl);
+    @PostMapping(value = "/uploadimg")
+    public ResultBody ImgUpload(MultipartFile file) {
+        String head = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            head = imageService.updateHead(file);//此处是调用上传服务接口
+            //head = "test/123312.jpg";
+            if (StringUtils.isNotBlank(head)) {
+                map.put("imgurl", head);
+                return ResultBody.success(map);
+            }
+        } catch (Exception e) {
+            log.error("【上传图片】" + e.getMessage());
+            return ResultBody.error("上传失败");
         }
         return ResultBody.error("上传失败");
-
-
     }
 
 
+    @DeleteMapping(value = "/delete")
+    public ResultBody ImgDelete(@NotNull String imgUrl) {
+        return ResultBody.error("上传失败");
+    }
+
+
+    /**
+     * 添加图片
+     *
+     * @param request
+     * @param images
+     * @return
+     */
+    @PostMapping("/add")
+    public ResultBody addImages(HttpServletRequest request, @Valid @RequestBody Images images) {
+        String username = (String) request.getAttribute("username");
+        images.setCreateName(username);
+        Boolean boo = this.imageService.saveImages(images);
+        if (!boo) {
+            return ResultBody.error("添加图片失败");
+        }
+        return ResultBody.success("添加图片成功");
+    }
+
+    /**
+     * 根据主键id查询images
+     *
+     * @param personId
+     * @return
+     */
+    @GetMapping("/query/{personId}")
+    public ResultBody queryImages(@PathVariable(value = "personId") Long personId) {
+        Images images = this.imageService.queryImagesByPersonId(personId);
+        return ResultBody.success(images);
+    }
+
+    /**
+     * 根据主键id修改images
+     *
+     * @param images
+     * @return
+     */
+    @PostMapping("/update")
+    public ResultBody updateImages(@Valid @RequestBody Images images) {
+        Boolean boo = this.imageService.updateImages(images);
+        if (!boo) {
+            return ResultBody.error("修改图片失败");
+        }
+        return ResultBody.success("修改图片成功");
+    }
 
 
 }

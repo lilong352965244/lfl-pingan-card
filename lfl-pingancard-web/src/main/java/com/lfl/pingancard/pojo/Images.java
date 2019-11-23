@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "tb_images")
@@ -19,14 +20,20 @@ public class Images {
     /**
      * person表主键id
      */
-    @NotBlank(message = "联系人id不能为空")
+    @NotNull(message = "联系人id不能为空")
     private Long personId;
 
     /**
-     * 图片地址，最多10个图片
+     * 图片地址，最多9个图片
      */
     @NotBlank(message = "图片地址不能为空")
     private String imagesUrl;
+
+    /**
+     * 要删除的图片地址
+     */
+    @Transient
+    private String delImagesUrl;
 
     /**
      * 图片描述
@@ -34,7 +41,7 @@ public class Images {
     private String imgDescription;
 
     /**
-     * 图片个数,默认10张
+     * 图片个数,默认9张
      */
     private Integer imageNumber;
 
@@ -46,7 +53,8 @@ public class Images {
     /**
      * 最后修改时间
      */
-    private Date lastUpdate;
+    private Date lastUpdateTime;
+
 
     /**
      * 创建人
