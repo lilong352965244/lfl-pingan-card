@@ -39,5 +39,5 @@ public interface PersonService {
      * @param key
      * @return
      */
-    PageResult<Person> queryPersonPageAndSort(Integer page, Integer rows, String sortBy, Boolean desc, String key);
+    PageResult<Person> queryPersonPageAndSort(Long userId,Integer page, Integer rows, String sortBy, Boolean desc, String key);
 }

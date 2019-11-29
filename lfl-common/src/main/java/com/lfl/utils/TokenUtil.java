@@ -29,11 +29,11 @@ public class TokenUtil {
      * @param username
      * @return
      */
-    public static String createJwtToken(String username,String id){
+    public static String createJwtToken(String username,String id,Date expireTime){
         String issuer="pingancard2019";
         String subject="lfl";
-        long ttlMillis= CommonConstant.JWT_EXPIRE_Millis;//24个小时后过期
-        return createJwtToken(username,id,issuer,subject,ttlMillis);
+        long ttlMillis= CommonConstant.JWT_EXPIRE_Millis;
+        return createJwtToken(username,id,expireTime,issuer,subject,ttlMillis);
     }
 
     /**
@@ -44,7 +44,8 @@ public class TokenUtil {
      * @param ttlMillis 签发时间（有效时间，过期会报错）
      * @return token string
      */
-    public static String createJwtToken(String username,String id,String issuer,String subject,long ttlMillis){
+    public static String createJwtToken(String username,String id,Date expireTime,
+                                        String issuer,String subject,long ttlMillis){
         //签名算法，将token进行签名
         SignatureAlgorithm signatureAlgorithm=SignatureAlgorithm.HS256;
         //生成签发时间
@@ -55,7 +56,8 @@ public class TokenUtil {
         Key signingKey=new SecretKeySpec(apiKeySecretBytes,signatureAlgorithm.getJcaName());
         //创建token
         JwtBuilder builder=Jwts.builder().setId(username)
-                .claim("id",id)
+                .claim("id",id)  // 用户的Id
+                .claim("expireTime",expireTime) // 过期时间
                 .setIssuedAt(now)
                 .signWith(signatureAlgorithm,signingKey);
         //添加过期时间
@@ -79,7 +81,7 @@ public class TokenUtil {
 
 //      String  token =      TokenUtil.createJwtToken("李四2", Long.toString(1L));
 //       System.out.println(token);
-        String   token =  "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiLmnY7lm5syIiwiaWQiOiIxIiwiaWF0IjoxNTczMjkxNzg4LCJleHAiOjE1NzMzNzgxODh9.JwMHIoenWXqwvT6AJS63RL57sO4uOcQFunCagKOd06c";
+        String   token =  "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJsaXNpIiwiaWQiOiI2IiwiZXhwaXJlVGltZSI6MTYwNTE0NDg1MTAwMCwiaWF0IjoxNTc0ODMzNzMyLCJleHAiOjE1NzUwOTI5MzJ9.iIUvalC4jfEo5_Ze_q9-WShZZHtFLbdpLr2VzjB3e3o";
 
         Claims claims = parseJWT(token);
         String claimsId = claims.getId();

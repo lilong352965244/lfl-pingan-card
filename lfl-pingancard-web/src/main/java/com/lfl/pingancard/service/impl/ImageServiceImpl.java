@@ -29,7 +29,7 @@ public class ImageServiceImpl implements ImageService {
         OSSClientUtil ossClient = new OSSClientUtil();
 
         if (file == null || file.getSize() <= 0) {
-            throw new CustomException("-1","上传图片不能为空");
+            throw new CustomException("-1", "上传图片不能为空");
         }
         String name = ossClient.uploadImg2Oss(file);
         String imgUrl = "https://sanyi-images.oss-cn-hongkong.aliyuncs.com/" + ossClient.getImgUrl(name);
@@ -101,5 +101,23 @@ public class ImageServiceImpl implements ImageService {
         }
         return false;
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deleteServiceImg(String imgUrl) {
+        //   imgUrl = "https://sanyi-images.oss-cn-hongkong.aliyuncs.com/test/1574667503449.jpg";
+        Boolean boo = false;
+        String[] deleteImages = imgUrl.split(",");
+        OSSClientUtil ossClient = new OSSClientUtil();
+        boo = ossClient.deleteFile(deleteImages);
+        // ossClient.destory();
+        return boo;
+    }
+
+    @Override
+
+    public Boolean deleteImgById(Long id) {
+        return this.imagesMapper.deleteByPrimaryKey(id) == 1;
     }
 }

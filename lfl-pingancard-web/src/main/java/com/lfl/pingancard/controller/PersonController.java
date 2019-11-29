@@ -38,19 +38,19 @@ public class PersonController {
     @PostMapping("add")
     public ResultBody addPerson(@Valid @RequestBody Person person,
                                 HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
-        User user = userService.queryUserByUsername(username);  //获得该客户的信息
-        if (user != null) {
-            person.setUserId(user.getId());
-            Boolean boo = this.personService.savePerson(person);
+        Long userId = Long.parseLong((String) request.getAttribute("id"));
+        // User user = userService.queryUserByUsername(username);  //获得该客户的信息
 
-            if (boo) {
-                // 获得tb_person的主键值
-                Map<String,Object> map=new HashMap<>();
-                map.put("personId",person.getId());
-                return ResultBody.success(map);
-            }
+        person.setUserId(userId);
+        Boolean boo = this.personService.savePerson(person);
+
+        if (boo) {
+            // 获得tb_person的主键值
+            Map<String, Object> map = new HashMap<>();
+            map.put("personId", person.getId());
+            return ResultBody.success(map);
         }
+
         return ResultBody.error("添加客户失败");
     }
 
@@ -84,13 +84,16 @@ public class PersonController {
 
     @GetMapping("/page")
     public ResultBody queryPersonPage(
+
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "rows", defaultValue = "5") Integer rows,
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @RequestParam(value = "desc", defaultValue = "false") Boolean desc,
-            @RequestParam(value = "key", required = false) String key
+            @RequestParam(value = "key", required = false) String key,
+            HttpServletRequest request
     ) {
-        PageResult<Person> pageResult = this.personService.queryPersonPageAndSort(page, rows, sortBy, desc, key);
+        Long userId = Long.parseLong((String) request.getAttribute("id"));
+        PageResult<Person> pageResult = this.personService.queryPersonPageAndSort(userId, page, rows, sortBy, desc, key);
         return ResultBody.success(pageResult);
     }
 

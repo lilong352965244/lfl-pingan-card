@@ -38,4 +38,18 @@ public interface ImageService {
      * @param images
      */
     Boolean updateImages(Images images);
+
+    /**
+     * 批量删除图片
+     * @param imgUrl
+     * @return
+     */
+    Boolean deleteServiceImg(String imgUrl);
+
+    /**
+     * 根据主键删除images
+     * @param id
+     * @return
+     */
+    Boolean deleteImgById(Long id);
 }

@@ -1,13 +1,14 @@
 package com.lfl.pingancard.service.impl;
 
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.lfl.common.pojo.PageResult;
-import com.lfl.pingancard.mapper.ImagesMapper;
+import com.lfl.exception.CustomException;
 import com.lfl.pingancard.mapper.PersonMapper;
 import com.lfl.pingancard.pojo.Images;
 import com.lfl.pingancard.pojo.Person;
+import com.lfl.pingancard.service.ImageService;
 import com.lfl.pingancard.service.PersonService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,21 @@ public class PersonServiceImpl implements PersonService {
     private PersonMapper personMapper;
 
     @Autowired
-    private ImagesMapper imagesMapper;
+    private ImageService imageService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean savePerson(Person person) {
+        //先获得该用户下客户的数量
+        Example example = new Example(Person.class);
+        example.createCriteria().andEqualTo("userId", person.getUserId());
+
+        int count = this.personMapper.selectCountByExample(example);
+        if (count > 150) {
+            throw new CustomException("-1", "客户数量不能超过150个！");
+        }
+
+
         Date date = new Date();
         person.setCreateTime(date);
         person.setLastUpdateTime(date);
@@ -52,24 +63,25 @@ public class PersonServiceImpl implements PersonService {
     public void deletePersonById(Long id) {
         // tb_person表中删除
         this.personMapper.deleteByPrimaryKey(id);
-
-        // tb-images表删除
-        Images images = new Images();
-        images.setPersonId(id);
-        Images imagesSel = imagesMapper.selectOne(images);
-
+        Images imagesSel = imageService.queryImagesByPersonId(id);
         // 删除服务器的图片，查询出的URL,根据URL去删除
-
+        Boolean boo = imageService.deleteServiceImg(imagesSel.getImagesUrl());
+        if (boo) {
+            // tb-images表删除
+            imageService.deleteImgById(imagesSel.getId());
+        }
     }
 
     @Override
-    public PageResult<Person> queryPersonPageAndSort(Integer page, Integer rows, String sortBy, Boolean desc, String key) {
+    public PageResult<Person> queryPersonPageAndSort(Long userId, Integer page, Integer rows, String sortBy, Boolean desc, String key) {
         // 设置查询 最多100条
         PageHelper.startPage(page, Math.min(rows, 100));
 
         // 创建查询条件
         Example example = new Example(Person.class);
         Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("userId", userId);
 
         // 条件过滤
         if (StringUtils.isNotBlank(key)) {

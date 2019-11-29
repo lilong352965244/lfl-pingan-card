@@ -1,9 +1,7 @@
 package com.lfl.pingancard.controller;
 
 import com.lfl.pingancard.pojo.Images;
-import com.lfl.pingancard.pojo.User;
 import com.lfl.pingancard.service.ImageService;
-import com.lfl.pingancard.service.UserService;
 import com.lfl.response.ResultBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -54,9 +52,15 @@ public class ImageController {
     }
 
 
-    @DeleteMapping(value = "/delete")
-    public ResultBody ImgDelete(@NotNull String imgUrl) {
-        return ResultBody.error("上传失败");
+    @DeleteMapping(value = "/deleteServerImg")
+    public ResultBody ImgDelete(@NotNull @RequestBody Map<String, Object> map) {
+
+
+        Boolean boo = this.imageService.deleteServiceImg((String) map.get("delImagesUrl"));
+        if (boo) {
+            return ResultBody.success("删除图片成功");
+        }
+        return ResultBody.error("删除图片失败");
     }
 
 

@@ -36,7 +36,8 @@ public interface UserService {
      * @param password
      * @return
      */
-    Boolean login(String mobile, String password, HttpServletRequest request, HttpServletResponse response);
+    Boolean login(String mobile, String password,String loginTime,String version,
+                  HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 根据username 获得use信息
@@ -44,4 +45,11 @@ public interface UserService {
      * @return
      */
     User queryUserByUsername(String username);
+
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    Boolean updateUser(User user);
 }

@@ -26,17 +26,19 @@ public class UserController {
      * 用户登录
      *
      * @param mobile
-     * @param Password
+     * @param password
      * @param request
      * @param response
      * @return
      */
     @GetMapping("/login")
     public ResultBody login(@RequestParam(name = "mobile") String mobile,
-                            @RequestParam(name = "password") String Password,
+                            @RequestParam(name = "password") String password,
+                            @RequestParam(name = "time") String loginTime,
+                            @RequestParam(name = "version") String version,
                             HttpServletRequest request,
                             HttpServletResponse response) {
-        Boolean boo = this.userService.login(mobile, Password, request, response);
+        Boolean boo = this.userService.login(mobile, password, loginTime,version,request, response);
         if (!boo) {
             return ResultBody.error("登录账号或密码错误");
         }
