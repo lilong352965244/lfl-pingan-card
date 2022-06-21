@@ -29,7 +29,7 @@
         <mapper.starter.version>2.0.2</mapper.starter.version>
         <druid.starter.version>1.1.9</druid.starter.version>
         <!--8.0.17 高版本; 5.1.46低版本-->
-        <mysql.version>8.0.17</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <pageHelper.starter.version>1.2.3</pageHelper.starter.version>
         <lfl.latest.version>1.0.0-SNAPSHOT</lfl.latest.version>
         <fastDFS.client.version>1.26.1-RELEASE</fastDFS.client.version>
